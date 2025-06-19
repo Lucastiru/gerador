@@ -1,3 +1,6 @@
+# Requisitos: Flask, WeasyPrint
+# Instale com: pip install flask weasyprint
+
 from flask import Flask, render_template_string, request, send_file
 from weasyprint import HTML
 import tempfile
@@ -12,53 +15,46 @@ HTML_TEMPLATE = '''
     <meta charset="UTF-8">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
             padding: 2cm;
-            background: #f8f8f8;
-            display: flex;
-            flex-direction: column;
-            gap: 2cm;
         }
         .etiqueta {
             width: 18cm;
-            border: 2px dashed #000;
-            padding: 1cm;
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+            border: 2px solid #333;
+            padding: 1.5cm;
+            background-color: #ffffff;
+            border-radius: 10px;
+            margin-bottom: 2cm;
         }
         .titulo {
-            font-size: 1.5em;
+            font-size: 22px;
             font-weight: bold;
-            margin-bottom: 0.5em;
+            margin-bottom: 0.5cm;
             border-bottom: 1px solid #ccc;
-            padding-bottom: 0.3em;
+            padding-bottom: 5px;
         }
         .linha {
-            font-size: 1.1em;
-            margin-bottom: 0.4em;
-        }
-        .info {
-            font-weight: bold;
-            color: #333;
+            font-size: 18px;
+            margin-bottom: 0.4cm;
         }
     </style>
 </head>
 <body>
     <div class="etiqueta">
         <div class="titulo">📦 REMETENTE</div>
-        <div class="linha info">{{ remetente }}</div>
-        <div class="linha">{{ endereco_remetente }}</div>
-        <div class="linha">Transportadora: <strong>{{ transportadora }}</strong></div>
-        <div class="linha">Mercadoria: <strong>Livro</strong></div>
+        <div class="linha">Nome: {{ remetente }}</div>
+        <div class="linha">Endereço: {{ endereco_remetente }}</div>
+        <div class="linha">Transportadora: {{ transportadora }}</div>
+        <div class="linha">Mercadoria: Livro</div>
     </div>
+
     <div class="etiqueta">
         <div class="titulo">🚚 DESTINATÁRIO</div>
-        <div class="linha info">{{ destinatario }}</div>
-        <div class="linha">{{ endereco_destinatario }}</div>
-        <div class="linha">Transportadora: <strong>{{ transportadora }}</strong></div>
-        <div class="linha">Mercadoria: <strong>Livro</strong></div>
+        <div class="linha">Nome: {{ destinatario }}</div>
+        <div class="linha">Endereço: {{ endereco_destinatario }}</div>
+        <div class="linha">Transportadora: {{ transportadora }}</div>
+        <div class="linha">Mercadoria: Livro</div>
     </div>
 </body>
 </html>
@@ -70,17 +66,77 @@ FORM_TEMPLATE = '''
 <head>
     <meta charset="UTF-8">
     <title>Gerador de Etiquetas</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .form-container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 <body>
-    <h2>Gerar Etiqueta de Envio</h2>
-    <form method="post">
-        <label>Remetente: <input type="text" name="remetente" required></label><br><br>
-        <label>Endereço Remetente: <input type="text" name="endereco_remetente" required></label><br><br>
-        <label>Destinatário: <input type="text" name="destinatario" required></label><br><br>
-        <label>Endereço Destinatário: <input type="text" name="endereco_destinatario" required></label><br><br>
-        <label>Transportadora: <input type="text" name="transportadora"></label><br><br>
-        <button type="submit">Gerar Etiqueta (PDF)</button>
-    </form>
+    <div class="form-container">
+        <h2>Gerar Etiqueta de Envio</h2>
+        <form method="post">
+            <label>Remetente:</label>
+            <input type="text" name="remetente" required>
+
+            <label>Endereço Remetente:</label>
+            <input type="text" name="endereco_remetente" required>
+
+            <label>Destinatário:</label>
+            <input type="text" name="destinatario" required>
+
+            <label>Endereço Destinatário:</label>
+            <input type="text" name="endereco_destinatario" required>
+
+            <label>Transportadora:</label>
+            <input type="text" name="transportadora">
+
+            <button type="submit">Gerar Etiqueta (PDF)</button>
+        </form>
+    </div>
 </body>
 </html>
 '''
